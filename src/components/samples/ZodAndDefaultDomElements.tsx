@@ -45,7 +45,7 @@ export const ZodAndDefaultDomElements = () => {
           }
         `}
       </style>
-      <h2 className="text-xl font-bold">Zod + Form element & onSubmit event</h2>
+      <h2 className="text-xl font-bold">Zod + Form element & onSubmit</h2>
       <div className="flex gap-6 mt-6">
         <label className="max-w-[160px] grow py-2">Username</label>
         <div className="grow">

@@ -10,7 +10,7 @@ const formSchema = z.object({
   email: z.string().email('Email is invalid.'),
 });
 
-export const ZodAndDefaultDomElements = () => {
+export const ZodAndDefaultDomElementsWithRealtimeValidation = () => {
   const [errors, setErrors] = useState<z.infer<typeof formSchema>>({
     username: '',
     email: '',
@@ -72,7 +72,9 @@ export const ZodAndDefaultDomElements = () => {
           }
         `}
       </style>
-      <h2 className="text-xl font-bold">Zod + Form element & onSubmit event</h2>
+      <h2 className="text-xl font-bold">
+        Zod + Form element & onSubmit & onChange
+      </h2>
       <div className="flex gap-6 mt-6">
         <label className="max-w-[160px] grow py-2">Username</label>
         <div className="grow">
