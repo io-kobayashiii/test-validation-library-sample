@@ -10,11 +10,33 @@ const formSchema = z.object({
   email: z.string().email('Email is invalid.'),
 });
 
-export const ZodAndDefaultDomElements = () => {
+export const ZodAndDefaultDomElementsWithRealtimeValidation = () => {
   const [errors, setErrors] = useState<z.infer<typeof formSchema>>({
     username: '',
     email: '',
   });
+
+  const handleFormChange = (event: React.ChangeEvent<HTMLFormElement>) => {
+    const { target } = event;
+    const key = target.name as keyof typeof formSchema.shape;
+    const fieldSchema = formSchema.shape[key];
+
+    if (
+      target instanceof HTMLInputElement ||
+      target instanceof HTMLTextAreaElement ||
+      target instanceof HTMLSelectElement
+    ) {
+      try {
+        fieldSchema.parse(target.value);
+        setErrors((state) => ({ ...state, [key]: '' }));
+      } catch (error) {
+        if (error instanceof ZodError) {
+          const [{ message }] = error.issues;
+          setErrors((state) => ({ ...state, [key]: message }));
+        }
+      }
+    }
+  };
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -36,7 +58,12 @@ export const ZodAndDefaultDomElements = () => {
   };
 
   return (
-    <form method="GET" action="/" onSubmit={handleSubmit}>
+    <form
+      method="GET"
+      action="/"
+      onChange={handleFormChange}
+      onSubmit={handleSubmit}
+    >
       <style>
         {`
           [data-error]::after {
@@ -45,7 +72,9 @@ export const ZodAndDefaultDomElements = () => {
           }
         `}
       </style>
-      <h2 className="text-xl font-bold">Zod + Form element & onSubmit</h2>
+      <h2 className="text-xl font-bold">
+        Zod + Form element & onSubmit & onChange
+      </h2>
       <div className="flex gap-6 mt-6">
         <label className="max-w-[160px] grow py-2">Username</label>
         <div className="grow">

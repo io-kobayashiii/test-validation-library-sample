@@ -1,6 +1,7 @@
 import { Card } from './components/card/Card';
 import { ZodAndControlledInputsForm } from './components/samples/ZodAndControlledInputsForm';
 import { ZodAndDefaultDomElements } from './components/samples/ZodAndDefaultDomElements';
+import { ZodAndDefaultDomElementsWithRealtimeValidation } from './components/samples/ZodAndDefaultDomElementsWithRealtimeValidation';
 
 function App() {
   return (
@@ -12,6 +13,9 @@ function App() {
           </Card>
           <Card className="mt-8">
             <ZodAndDefaultDomElements />
+          </Card>
+          <Card className="mt-8">
+            <ZodAndDefaultDomElementsWithRealtimeValidation />
           </Card>
         </main>
       </div>
