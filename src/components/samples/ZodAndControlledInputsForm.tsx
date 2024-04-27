@@ -22,7 +22,7 @@ export const ZodAndControlledInputsForm = () => {
   });
   return (
     <form>
-      <h2 className="text-xl font-bold">Zod + Controlled inputs</h2>
+      <h2 className="text-xl font-bold">Zod + Controlled components</h2>
       <div className="flex gap-6 mt-6">
         <label className="max-w-[160px] grow py-2">Username</label>
         <div className="grow">
