@@ -2,16 +2,12 @@ import { useState } from 'react';
 import { ZodError, z } from 'zod';
 
 const formSchema = z.object({
-  username: z
-    .string({
-      required_error: 'Username is required.',
-    })
-    .min(1, 'Username cannot be empty.'),
+  username: z.string().min(1, 'Username cannot be empty.'),
   email: z.string().email('Email is invalid.'),
 });
 
 export const ZodAndDefaultDomElementsWithRealtimeValidation = () => {
-  const [errors, setErrors] = useState<z.infer<typeof formSchema>>({
+  const [formError, setFormError] = useState<z.infer<typeof formSchema>>({
     username: '',
     email: '',
   });
@@ -28,11 +24,11 @@ export const ZodAndDefaultDomElementsWithRealtimeValidation = () => {
     ) {
       try {
         fieldSchema.parse(target.value);
-        setErrors((state) => ({ ...state, [key]: '' }));
+        setFormError((state) => ({ ...state, [key]: '' }));
       } catch (error) {
         if (error instanceof ZodError) {
           const [{ message }] = error.issues;
-          setErrors((state) => ({ ...state, [key]: message }));
+          setFormError((state) => ({ ...state, [key]: message }));
         }
       }
     }
@@ -45,14 +41,18 @@ export const ZodAndDefaultDomElementsWithRealtimeValidation = () => {
 
     try {
       formSchema.parse(Object.fromEntries(formData.entries()));
-      setErrors({ username: '', email: '' });
+      setFormError({ username: '', email: '' });
+
+      // {
+      //   // バリデーションチェックをパスした場合の処理...
+      // }
     } catch (error) {
       if (error instanceof ZodError) {
         const newErrors: { [key: string]: string } = {};
         error.issues.forEach((issue) => {
           newErrors[issue.path[0]] = issue.message;
         });
-        setErrors(newErrors as z.infer<typeof formSchema>);
+        setFormError(newErrors as z.infer<typeof formSchema>);
       }
     }
   };
@@ -64,14 +64,6 @@ export const ZodAndDefaultDomElementsWithRealtimeValidation = () => {
       onChange={handleFormChange}
       onSubmit={handleSubmit}
     >
-      <style>
-        {`
-          [data-error]::after {
-            content: attr(data-error);
-            display: block;
-          }
-        `}
-      </style>
       <h2 className="text-xl font-bold">
         Zod + Form element & onSubmit & onChange
       </h2>
@@ -82,7 +74,11 @@ export const ZodAndDefaultDomElementsWithRealtimeValidation = () => {
             className="w-full rounded-md p-2 text-slate-900"
             name="username"
           />
-          <p className="mt-1 text-red-400" data-error={errors.username} />
+          {formError.username && (
+            <p className="mt-1 text-red-400 leading-none">
+              {formError.username}
+            </p>
+          )}
         </div>
       </div>
       <div className="flex gap-6 mt-6">
@@ -92,7 +88,9 @@ export const ZodAndDefaultDomElementsWithRealtimeValidation = () => {
             className="w-full rounded-md p-2 text-slate-900"
             name="email"
           />
-          <p className="mt-1 text-red-400" data-error={errors.email} />
+          {formError.email && (
+            <p className="mt-1 text-red-400 leading-none">{formError.email}</p>
+          )}
         </div>
       </div>
       <div className="flex justify-end mt-6">
