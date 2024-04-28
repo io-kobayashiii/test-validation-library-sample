@@ -3,11 +3,7 @@ import { ZodError, z } from 'zod';
 import { FormItem } from '../../zod/types';
 
 const formSchema = z.object({
-  username: z
-    .string({
-      required_error: 'Username is required.',
-    })
-    .min(1, 'Username cannot be empty.'),
+  username: z.string().min(1, 'Username cannot be empty.'),
   email: z.string().email('Email is invalid.'),
 });
 
@@ -47,7 +43,9 @@ export const ZodAndControlledInputsForm = () => {
             }}
           />
           {username.errorMessage && (
-            <p className="mt-1 text-red-400">{username.errorMessage}</p>
+            <p className="mt-1 text-red-400 leading-none">
+              {username.errorMessage}
+            </p>
           )}
         </div>
       </div>
@@ -75,7 +73,9 @@ export const ZodAndControlledInputsForm = () => {
             }}
           />
           {email.errorMessage && (
-            <p className="mt-1 text-red-400">{email.errorMessage}</p>
+            <p className="mt-1 text-red-400 leading-none">
+              {email.errorMessage}
+            </p>
           )}
         </div>
       </div>
